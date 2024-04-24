@@ -1,0 +1,148 @@
+/* Basic page styles */
+body {
+    font-family: 'Lato', sans-serif; /* Using Lato for a modern look */
+    background-color: #f4f7fa; /* Light grey-blue background for a calm feel */
+    color: #424242; /* Updated to a softer dark grey for main text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header and messages styles */
+.header-title {
+    font-size: 24px; /* Size in pixels for precision */
+}
+.message-text {
+    font-size: 16px;
+}
+
+/* Link styling */
+a, a:hover, a:focus {
+    color: #5071f1; /* Updated to a vibrant light blue for links */
+    text-decoration: none; /* Removes underline */
+}
+
+/* Styling for primary interaction buttons */
+.button-primary, .button-add, .button-comment, .button-login, .button-signup, .button-reply {
+    background-color: #5071f1; /* Consistent vibrant light blue */
+    color: white;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.button-primary:hover, .button-add:hover, .button-comment:hover, .button-login:hover, .button-signup:hover, .button-reply:hover {
+    background-color: #3f5cb7; /* Darker shade of blue on hover */
+}
+
+/* Cancel and outline button styles */
+.button-cancel, .button-outline {
+    background-color: transparent;
+    color: #666666; /* Darker grey for visible contrast */
+    border: 1px solid #5071f1; /* Border color matching link color */
+}
+
+.button-cancel:hover, .button-outline:hover {
+    background-color: #e8e8e8; /* Light grey background on hover */
+    color: #5071f1; /* Link color text on hover */
+}
+
+/* Special buttons for actions like edit and delete */
+.button-edit {
+    background-color: #32be8f; /* Mint green for edit buttons */
+    color: white;
+    border: none;
+}
+
+.button-edit:hover {
+    background-color: #28a076; /* Slightly darker mint green */
+}
+
+.button-delete {
+    background-color: #e57373; /* Soft red for delete buttons */
+    color: white;
+    border: none;
+}
+
+.button-delete:hover {
+    background-color: #d32f2f; /* Darker red */
+}
+
+/* Common styles for all buttons */
+.button {
+    padding: 8px 16px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.non-interactive {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Navbar styles for branding and navigation links */
+.navbar {
+    background-color: #5071f1 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand, .navbar-item {
+    color: #ffffff; /* White text for legibility */
+    font-weight: bold;
+}
+
+.navbar-brand:hover, .navbar-item:hover {
+    color: #d6d6d6; /* Lighter grey on hover */
+}
+
+/* Dropdown menu styling within navbar */
+.navbar .dropdown-menu {
+    background-color: #ffffff; /* White background for dropdown */
+}
+
+.dropdown-item {
+    color: #333333; /* Dark grey for dropdown items */
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #f4f7fa; /* Light grey-blue for hover */
+}
+
+/* Styling for responsive navbar toggler */
+.navbar-dark .navbar-toggler {
+    background-color: transparent;
+}
+
+.navbar-dark .navbar-toggler-icon {
+    filter: invert(100%); /* Ensure the icon is visible on dark background */
+}
+
+/* Styling for large banners or introductions */
+.jumbotron {
+    background-color: #f4f7fa; /* Matches the body background */
+    color: #333333;
+}
+
+.jumbotron .button {
+    background-color: #5071f1; /* Vibrant light blue */
+    color: white;
+}
+
+.jumbotron .button:hover {
+    background-color: #3f5cb7;
+    color: white;
+}
+
+/* Ensure footer is neatly styled and positioned */
+footer {
+    background-color: #f4f7fa; /* Light grey-blue to match the body */
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}

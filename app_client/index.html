@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html ng-app="bloggerApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Angular and other library scripts -->
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-ui-router.js"></script>
+    <script src="lib/angular-route.min.js"></script>
+
+    <script src="bloggerApp.js"></script>
+
+    <title> Sujan Gurung Blogs Site </title>
+</head>
+
+<!-- Header and Footer contents -->
+<body>
+        <div ng-controller="NavigationController">
+            <navigation></navigation>
+        </div>
+
+        <div ui-view style="padding: 20px; background-color: #f0f0f0;"></div>
+
+    <!-- home.html -->
+    <script type="text/ng-template" id="/home.html">
+        <div class="container mt-5">
+            <div class="jumbotron text-center">
+                <h1 class="display-4">{{ vm.title }}</h1>
+                <p class="lead">{{ vm.message }}</p>
+                <hr class="my-4">
+                <p> Click here to see my Blogs!</p>
+                <a class="btn btn-primary btn-lg" ui-sref="blogList" role="button">View Blogs</a>
+            </div>
+        </div>
+    </script>
+
+<!-- blogList.html -->
+<script type="text/ng-template" id="/blogList.html">
+  <div class="container py-5">
+      <h2 class="mb-4 text-uppercase text-center">{{ vm.title }}</h2>
+      <section class="d-flex flex-wrap justify-content-center">
+          <article ng-repeat="blog in vm.blogs track by blog._id" class="m-3">
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                      <h5 class="card-title">{{ blog.blogTitle }}</h5>
+                      <p class="card-text">{{ blog.blogText | limitTo: 100 }}...</p>
+                      <footer class="d-flex justify-content-between align-items-center">
+                          <time class="text-muted">{{ blog.createdOn | date:'mediumDate' }}</time>
+                          <span class="blog-author"><i class="fas fa-user"></i> {{ blog.author }}</span>
+                          <div class="blog-actions">
+                              <a ng-show="vm.isLoggedIn() && vm.currentUser().email === blog.authorEmail" ui-sref="blogEdit({blogid: blog._id})" title="Edit">
+                                  <i class="fas fa-edit"></i>
+                              </a>
+                              <a ng-show="vm.isLoggedIn() && vm.currentUser().email === blog.authorEmail" ui-sref="blogDelete({blogid: blog._id})" title="Delete">
+                                  <i class="fas fa-trash-alt"></i>
+                              </a>
+                          </div>
+                      </footer>
+                  </div>
+              </div>
+          </article>
+          <div ng-if="!vm.blogs.length" class="text-center w-100">
+              <p class="mt-5">No blogs have been added yet. <a ui-sref="blogAdd" class="btn btn-outline-primary">Add a Post</a></p>
+          </div>
+      </section>
+  </div>
+</script>
+
+
+  <!-- blogAdd.html -->
+  <script type="text/ng-template" id="/blogAdd.html">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">Create New Blog Post</div>
+                    <div class="card-body">
+                        <form ng-submit="vm.submitBlog()" ng-controller="AddController as vm">
+                            <div class="form-group">
+                                <label for="blogTitle">Title</label>
+                                <input type="text" class="form-control" id="blogTitle" ng-model="vm.blog.blogTitle" placeholder="Enter the title of your blog" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="blogText">Content</label>
+                                <textarea class="form-control" id="blogText" ng-model="vm.blog.blogText" placeholder="Compose your blog post here..." rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Publish Post</button>
+                            <a ui-sref="blogList" class="btn btn-outline-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+  
+    <!-- blogEdit.html -->
+    <script type="text/ng-template" id="/blogEdit.html">
+      <div class="container py-5">
+          <div class="row justify-content-center">
+              <div class="col-lg-8">
+                  <div class="card border-0 shadow-sm">
+                      <div class="card-header bg-info text-white">Update Blog Post</div>
+                      <div class="card-body">
+                          <form ng-submit="vm.editBlog()" ng-controller="EditController as vm">
+                              <div class="form-group">
+                                  <label for="blogTitle" class="form-label">Post Title</label>
+                                  <input type="text" class="form-control" id="blogTitle" ng-model="vm.blog.blogTitle" placeholder="Enter the blog title" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="blogText" class="form-label">Content</label>
+                                  <textarea class="form-control" id="blogText" ng-model="vm.blog.blogText" placeholder="Edit your blog content here" rows="5" required></textarea>
+                              </div>
+                              <div class="d-flex justify-content-between">
+                                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                                  <a ui-sref="blogList" class="btn btn-outline-danger">Cancel</a>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </script>
+  
+      
+    <!-- blogDelete.html -->
+    <script type="text/ng-template" id="/blogDelete.html">
+      <div class="container py-5">
+          <div class="row justify-content-center">
+              <div class="col-lg-8">
+                  <div class="card shadow-lg border-0">
+                      <div class="card-header bg-danger text-white">Confirm Blog Deletion</div>
+                      <div class="card-body">
+                          <form ng-submit="vm.deleteBlog()" ng-controller="DeleteController as vm">
+                              <p class="text-center font-weight-bold text-danger">
+                                  Are you sure you want to permanently delete this blog post?
+                                  <br>This action cannot be undone.
+                              </p>
+                              <h5 class="text-center mb-3">{{ vm.blog.blogTitle }}</h5>
+                              <p class="text-center text-muted">
+                                  {{ vm.blog.blogText | limitTo: 200 }}{{vm.blog.blogText.length > 200 ? '...' : ''}}
+                              </p>
+                              <div class="d-flex justify-content-center gap-3 mt-4">
+                                  <button type="submit" class="btn btn-danger btn-lg">Delete Forever</button>
+                                  <a ui-sref="blogList" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </script>
+        
+    <!-- register.html -->
+    <script type="text/ng-template" id="/register.html">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">Sign Up for a New Account</div>
+                        <div class="card-body">
+                            <form ng-submit="vm.onRegister()" class="form">
+                                <div class="form-group">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" ng-model="vm.credentials.name" placeholder="Your full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" ng-model="vm.credentials.email" placeholder="Your email address" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" ng-model="vm.credentials.password" placeholder="Create a password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                            </form>
+                            <div class="text-center mt-4">
+                                <p>Already have an account? <a ui-sref="login">Log in here</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    
+  
+      
+    <!-- login.html -->
+    <script type="text/ng-template" id="/login.html">
+      <div class="container py-5">
+          <div class="row justify-content-center">
+              <div class="col-lg-6">
+                  <div class="card shadow-sm">
+                      <div class="card-header bg-secondary text-white">Member Login</div>
+                      <div class="card-body">
+                          <form ng-submit="vm.onSubmit()" class="form">
+                              <div class="form-group">
+                                  <label for="email" class="form-label">Email Address</label>
+                                  <input type="email" class="form-control" id="email" ng-model="vm.credentials.email" placeholder="Your email" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="password" class="form-label">Password</label>
+                                  <input type="password" class="form-control" id="password" ng-model="vm.credentials.password" placeholder="Your password" required>
+                              </div>
+                              <button type="submit" class="btn btn-success w-100">Log In</button>
+                          </form>
+                          <div class="text-center mt-4">
+                              <p>Don’t have an account? <a ui-sref="register">Sign up now</a>.</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </script>
+  
+      
+    <script src="common/nav/navigation.js"></script>
+    <script src="common/auth/authentication.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
